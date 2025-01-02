@@ -12,7 +12,6 @@ class AnswerTests(APITestCase):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
 
         self.question = Question.objects.create(
-            id=1,
             title='Test Question', 
             content='Test Content', 
             author=self.user, 
@@ -36,15 +35,14 @@ class AnswerTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK) 
 
     def test_answer_post(self):
-        pass
-        # url = reverse('answer-list-create')
-        # data = {
-        #     'question':self.question.id,
-        #     'content':'1Answer',
-        #     'author': self.user.id,
-        # }
-        # response = self.client.post(url, data, format="json")
-        # self.assertEqual(response.status_code, status.HTTP_201_CREATED) 
+        url = reverse('answer-list-create')
+        data = {
+            'question':self.question.id,
+            'content':'1Answer',
+            'author': self.user.id,
+        }
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED) 
 
     def test_answer_update(self):
         pass
@@ -52,4 +50,4 @@ class AnswerTests(APITestCase):
     def test_answer_delete(self):
         url = reverse('answer-detail', kwargs={'pk' : self.answer.id})
         response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK) 
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT) 

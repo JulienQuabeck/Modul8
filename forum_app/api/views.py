@@ -1,7 +1,7 @@
 from rest_framework import viewsets, generics, permissions
 from forum_app.models import Like, Question, Answer
 from .serializers import QuestionSerializer, AnswerSerializer, LikeSerializer
-from .permissions import IsOwnerOrAdmin, CustomQuestionPermission
+from .permissions import IsOwnerOrAdmin, CustomQuestionPermission, IsOwnerOrAdminForAnswer
 
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
@@ -22,7 +22,7 @@ class AnswerListCreateView(generics.ListCreateAPIView):
 class AnswerDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
-    permission_classes = [IsOwnerOrAdmin]
+    permission_classes = [IsOwnerOrAdminForAnswer]
 
 class LikeViewSet(viewsets.ModelViewSet):
     queryset = Like.objects.all()
