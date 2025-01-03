@@ -44,8 +44,30 @@ class AnswerTests(APITestCase):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED) 
 
-    def test_answer_update(self):
-        pass
+    def test_answer_update_authorized(self):
+        url = reverse('answer-detail', kwargs={'pk': self.answer.id})
+        updated_data = {
+            'question':self.question.id,
+            'content': 'Updated Answer Content',
+            'author': self.user.id,
+        }
+        
+        response = self.client.put(url, updated_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_answer_update_unauthorized(self):
+        self.client.logout()
+        other_user = User.objects.create_user(username='otheruser', password='otherpassword')
+        other_client = APIClient()
+        other_client.force_authenticate(user=other_user)
+        
+        url = reverse('answer-detail', kwargs={'pk': self.answer.id})
+        updated_data = {
+            'content': 'Updated Answer Content'
+        }
+        
+        response = other_client.put(url, updated_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_answer_delete(self):
         url = reverse('answer-detail', kwargs={'pk' : self.answer.id})

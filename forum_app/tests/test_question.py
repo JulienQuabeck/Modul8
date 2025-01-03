@@ -11,8 +11,6 @@ class QuestionTexts(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.question = Question.objects.create(title='Test Question', content='Test Content', author=self.user, category='frontend')
-        # self.client = APIClient()
-        # self.client.login(username='testuser', password='testpassword')
 
         self.token =  Token.objects.create(user=self.user)
         self.client = APIClient()
